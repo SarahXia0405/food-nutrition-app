@@ -5,5 +5,3 @@ scikit-learn
 spacy
 joblib
 pickle-mixin
-spacy
-en-core-web-md

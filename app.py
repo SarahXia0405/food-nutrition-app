@@ -1,29 +1,9 @@
-import os
-import spacy
-import subprocess
 import streamlit as st
 import pandas as pd
 import joblib
 import json
 from food_matching import find_closest_component  # Import NLP function
 
-# 🔹 Step 1: Ensure the spaCy Model is Installed
-def load_spacy_model(model_name="en_core_web_md"):
-    """Load a spaCy model. If not available, download and install it."""
-    try:
-        nlp = spacy.load(model_name)
-        print(f"✅ Loaded spaCy model: {model_name}")
-    except OSError:
-        print(f"⚠️ {model_name} not found. Downloading now...")
-        subprocess.run(["python", "-m", "spacy", "download", model_name], check=True)
-        nlp = spacy.load(model_name)
-        print(f"✅ Successfully downloaded and loaded {model_name}")
-    return nlp
-
-# Load the spaCy model
-nlp = load_spacy_model()
-
-# 🔹 Step 2: Load Machine Learning Models and Data
 # Load trained RandomForest model
 best_rf = joblib.load("random_forest_model.pkl")
 
@@ -34,7 +14,7 @@ with open("nutrition_columns.json", "r") as f:
 # Load the estimated nutrient contributions from least squares regression
 component_nutrition_matrix = pd.read_csv("component_nutrition_matrix.csv", index_col=0)
 
-# 🔹 Step 3: Streamlit UI Setup
+# Streamlit UI
 st.title("🍏 Food Nutrition Density Predictor")
 st.write("Enter a food name to find similar known components and predict its nutrition density.")
 
@@ -78,4 +58,3 @@ if user_food:
 
     else:
         st.error("❌ No similar food components found.")
-
